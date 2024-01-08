@@ -1,26 +1,64 @@
 import { Injectable } from '@nestjs/common';
+import { TaskStatus } from '@prisma/client';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TasksService {
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  constructor(private prismaService: PrismaService) {}
+
+  async create(createTaskDto: CreateTaskDto) {
+    const task = await this.prismaService.task.create({
+      data: {
+        title: createTaskDto.title,
+        status: TaskStatus.TODO,
+        description: createTaskDto.description,
+        deadline: createTaskDto.deadline,
+      },
+    });
+
+    return task;
   }
 
-  findAll() {
-    return `This action returns all tasks`;
+  async findAll() {
+    const tasks = await this.prismaService.task.findMany({
+      where: {
+        status: {
+          not: TaskStatus.DELETED,
+        },
+      },
+    });
+
+    return tasks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(id: string) {
+    const task = await this.prismaService.task.findUnique({
+      where: { id },
+    });
+
+    return task;
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: string, updateTaskDto: UpdateTaskDto) {
+    return this.prismaService.task.update({
+      where: { id },
+      data: {
+        title: updateTaskDto.title,
+        description: updateTaskDto.description,
+        deadline: updateTaskDto.deadline,
+        status: updateTaskDto.status,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: string) {
+    return this.prismaService.task.update({
+      where: { id },
+      data: {
+        status: TaskStatus.DELETED,
+      },
+    });
   }
 }
