@@ -3,12 +3,13 @@ import { TaskStatus } from '@prisma/client';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(createTaskDto: CreateTaskDto) {
+  async create(createTaskDto: CreateTaskDto): Promise<Task> {
     const task = await this.prismaService.task.create({
       data: {
         title: createTaskDto.title,
@@ -21,7 +22,7 @@ export class TasksService {
     return task;
   }
 
-  async findAll() {
+  async findAll(): Promise<Task[]> {
     const tasks = await this.prismaService.task.findMany({
       where: {
         status: {
@@ -33,7 +34,7 @@ export class TasksService {
     return tasks;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Task> {
     const task = await this.prismaService.task.findUnique({
       where: { id },
     });
@@ -45,7 +46,9 @@ export class TasksService {
     return task;
   }
 
-  async update(id: string, updateTaskDto: UpdateTaskDto) {
+  async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
+    console.log('typeof deadline:', typeof updateTaskDto.deadline);
+
     const task = await this.prismaService.task.findUnique({
       where: { id },
     });
@@ -69,7 +72,7 @@ export class TasksService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<void> {
     const task = await this.prismaService.task.findUnique({
       where: { id },
     });

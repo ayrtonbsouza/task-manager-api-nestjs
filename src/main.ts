@@ -10,7 +10,14 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Tasks API')
-    .setDescription('The tasks API')
+    .setDescription(
+      `This API was built as part of the challenge I committed to completing.
+      The challenge is to develop the same API in different programming languages,
+      using different frameworks and ORMs. This version was written using Typescript,
+      using NestJS as the framework and Prisma as ORM.`,
+    )
+    .setContact('Ayrton Souza', 'https://ayrtonsouza.com', 'me@ayrtonsouza.com')
+    .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .setVersion('1.0')
     .build();
 
