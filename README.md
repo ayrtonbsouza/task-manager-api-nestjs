@@ -45,7 +45,7 @@ To run this project, follow these steps:
 
 ## License
 
-This project is licensed under the MIT License. See the [license file](LICENSE) for more information.
+This project is licensed under the ISC License. See the [license file](LICENSE) for more information.
 
 ---
 
