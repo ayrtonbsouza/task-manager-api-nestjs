@@ -9,6 +9,8 @@ services:
       - 3000:3000
     volumes:
       - .:/home/node/app
+    depends_on:
+      - database
   database:
     image: postgres
     container_name: tasks-database
