@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TaskStatus } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UpdateTaskDto {
@@ -14,6 +15,7 @@ export class UpdateTaskDto {
   description?: string;
 
   @IsOptional()
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
   @IsDate()
   @ApiProperty({
     description: 'Deadline of the task',

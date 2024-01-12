@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateTaskDto {
@@ -12,6 +13,7 @@ export class CreateTaskDto {
   @ApiProperty({ description: 'Description of the task', required: false })
   description?: string;
 
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
   @IsDate()
   @IsOptional()
   @ApiProperty({
